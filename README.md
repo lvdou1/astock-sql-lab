@@ -9,7 +9,7 @@ pip install -r requirements.txt
 python run.py
 ```
 
-<p align="center"><i>22 只 A 股 · 25,914 条日线 · 418 期财报 · 建库到出结果 0.9 秒</i></p>
+<p align="center"><i>22 只 A 股 · 25,914 条日线 · 418 期财报 · 建库到出结果不到 1 秒</i></p>
 
 ---
 
