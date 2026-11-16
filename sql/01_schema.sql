@@ -10,22 +10,24 @@ DROP TABLE IF EXISTS dim_industry;
 
 -- ---------- 维度表 ----------
 
--- 行业维度。industry_level 是自定义的一级归类（消费/金融/医药/科技/制造/周期），
--- 用来做跨申万行业的横向比较。
+-- 行业维度。industry_level 是自定义的大类归类（消费/金融/医药/科技/制造/周期/公用），
+-- 用来做跨申万行业的横向比较——申万一级切太细，小行业只有 1-2 只样本。
 CREATE TABLE dim_industry (
     industry_code   VARCHAR PRIMARY KEY,
     industry_name   VARCHAR NOT NULL,
     industry_level  VARCHAR NOT NULL
 );
 
--- 股票维度。board 区分主板/创业板，因为涨跌停幅度不同（10% vs 20%），
+-- 股票维度。board 区分主板/创业板/科创板，因为涨跌停幅度不同（10% vs 20%），
 -- 做异常涨跌幅校验时必须带上这个字段，否则会把创业板的正常波动误判为异常。
+-- index_membership 记录所属指数（沪深300 / 中证500），用于对比大盘与中盘的表现差异。
 CREATE TABLE dim_stock (
-    stock_code      VARCHAR PRIMARY KEY,
-    stock_name      VARCHAR NOT NULL,
-    industry_code   VARCHAR NOT NULL REFERENCES dim_industry(industry_code),
-    board           VARCHAR NOT NULL,
-    is_st           BOOLEAN NOT NULL
+    stock_code       VARCHAR PRIMARY KEY,
+    stock_name       VARCHAR NOT NULL,
+    industry_code    VARCHAR NOT NULL REFERENCES dim_industry(industry_code),
+    board            VARCHAR NOT NULL,
+    index_membership VARCHAR NOT NULL,
+    is_st            BOOLEAN NOT NULL
 );
 
 -- ---------- 事实表 ----------

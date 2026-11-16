@@ -2,14 +2,17 @@
 -- 问题：每只股票在自己的行业里排第几？跑赢/跑输行业中位数多少？
 -- 技巧：ROW_NUMBER 做名次，MEDIAN() OVER (PARTITION BY) 在同一次扫描里算出行业基准，
 --       不必再写一个 GROUP BY 子查询回连——这是窗口函数最典型的用法。
--- 结论：绝对收益高不代表做得好，要看超额。医药生物 5 只全部下跌（行业中位数 -37.26%），
---       恒瑞医药 -2.84% 却是行业第一，超额 +34.43pct；ST康美 -54.57% 行业垫底。
---       注意"行业内排名"的 x/y 里 y 最小是 1（有色金属、建筑材料只有 1 只样本），
---       这种情况下超额收益恒为 0，行业基准没有统计意义，已在备注列标注。
+-- 结论：绝对收益高不代表做得好，要看超额。交通运输行业最强，招商轮船 +260.92%，
+--       而行业中位数只有 +3.63%，超额 +257.29pct——航运周期股在 2022-2026 是最大赢家。
+--       反面是食品饮料：21 只里中位数 -37.81%，重庆啤酒 -62.15% 垫底，
+--       说明"大行业"不等于"好行业"，样本足够时行业基准才有意义（电子 77 只、医药生物 63 只）。
 
 WITH span AS (
     SELECT stock_code, MIN(trade_date) AS d0, MAX(trade_date) AS d1, COUNT(*) AS n_days
-    FROM fact_daily_quote GROUP BY stock_code
+    FROM fact_daily_quote
+    GROUP BY stock_code
+    -- 与 Q1 保持同一评估窗口：只保留区间内全程有数据的标的
+    HAVING MIN(trade_date) = (SELECT MIN(trade_date) FROM fact_daily_quote)
 ),
 px AS (
     SELECT s.stock_code, s.d0,
