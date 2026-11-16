@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 数据库文件（可由 run.py 重新生成，不入库）
+data/*.duckdb
+data/*.duckdb.wal
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 临时
+*.log
+~$*

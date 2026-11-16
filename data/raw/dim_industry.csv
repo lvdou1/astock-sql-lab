@@ -1,0 +1,11 @@
+﻿industry_code,industry_name,industry_level
+SW01,医药生物,医药
+SW02,家用电器,消费
+SW03,建筑材料,周期
+SW04,有色金属,周期
+SW05,机械设备,制造
+SW06,电力设备,制造
+SW07,电子,科技
+SW08,计算机,科技
+SW09,银行,金融
+SW10,食品饮料,消费
